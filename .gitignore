@@ -1,0 +1,28 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+
+# Environments
+virtual/
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Databases
+db.sqlite3
+db.sqlite3-journal
+
+# Celery files
+celerybeat-schedule
+celerybeat.pid
+
+# Logs
+*.log
+
+# Coverage reports
+.coverage
+.coverage.*
