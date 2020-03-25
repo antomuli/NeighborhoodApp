@@ -6,4 +6,5 @@ from . import views
 app_name = 'api_auth'
 
 urlpatterns = [
+    path('signup', views.UserRegister.as_view()),
 ]
