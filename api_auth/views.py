@@ -4,16 +4,8 @@ from rest_framework.renderers import JSONRenderer
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 
-from .models import User
+from .models import User, Profile
 from .serializers import UserSerializer
-
-
-class HelloView(APIView):
-    permission_classes = (IsAuthenticated,)
-
-    def get(self, request):
-        content = {'message': 'Hello, World!'}
-        return Response(content)
 
 
 class UserRegister(APIView):
@@ -31,13 +23,20 @@ class UserRegister(APIView):
                     raw_password=serializer.validated_data['password']
                 )
                 user.save_user()
+                gravatar_url = user.create_gravatar()
+                user_profile = Profile(user=user, gravatar=gravatar_url)
+                user_profile.save_profile()
 
                 return Response(
                     {
                         'public_id': user.public_id,
                         'first_name': user.first_name,
                         'last_name': user.last_name,
-                        'email': user.email
+                        'email': user.email,
+                        'profile': {
+                            'gravatar': user.profile.gravatar,
+                            'bio': user.profile.bio
+                        }
                     },
                     status=status.HTTP_201_CREATED)
                 
