@@ -95,11 +95,27 @@ class JoinHoodView(APIView):
             ).first()
             
             if hood is not None:
-                current_user.profile.neighborhood = hood
-                current_user.profile.save_profile()
+                if current_user.profile.neighborhood is None:
+                    if current_user.profile.neighborhood != hood:
+                        current_user.profile.neighborhood = hood
+                        current_user.profile.save_profile()
 
-                hood.occupants += 1
-                hood.save_hood()
+                        hood.occupants += 1
+                        hood.save_hood()
+                    
+                    else:
+                        pass
+
+                else:
+                    old_hood = current_user.profile.neighborhood
+                    old_hood.occupants -= 1
+                    old_hood.save()
+                    
+                    current_user.profile.neighborhood = hood
+                    current_user.profile.save_profile()
+
+                    hood.occupants += 1
+                    hood.save_hood()
 
                 return Response(
                     serializer.data
