@@ -44,11 +44,6 @@ class Profile(models.Model):
         self.save()
 
     def update_profile(self, gravatar=None, bio=None):
-        if type(gravatar) is str and type(bio) is str:
-            pass
-        else:
-            raise TypeError('gravatar and bio should be of type str')
-        
         if gravatar is not None:
             self.gravatar = gravatar
 
