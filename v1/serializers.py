@@ -1,7 +1,7 @@
 from rest_framework import serializers
-from api_auth.models import Profile
 
-from .models import Hood
+from .models import Hood, Profile
+
 
 class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
@@ -20,10 +20,11 @@ class UserProfileUpdateSerializer(serializers.ModelSerializer):
 class HoodListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Hood
-        exclude = ['admin', 'assignee']
+        exclude = ['admin', 'assignee', 'id']
+        read_only_fields = ['occupants', 'public_id']
 
 
 class HoodInfoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Hood
-        fields = ('__all__')
+        exclude = ['id']

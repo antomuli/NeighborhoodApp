@@ -4,7 +4,8 @@ from rest_framework.renderers import JSONRenderer
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 
-from .models import User, Profile
+from .models import User
+from v1.models import Profile
 from .serializers import UserSerializer
 
 

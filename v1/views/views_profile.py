@@ -4,7 +4,8 @@ from rest_framework.views import APIView
 from rest_framework.renderers import JSONRenderer
 from rest_framework import status
 
-from api_auth.models import User, Profile
+from api_auth.models import User
+from ..models import Profile
 
 from ..serializers import UserProfileSerializer, UserProfileUpdateSerializer
 from ..permissions import IsAuthenticatedProfile

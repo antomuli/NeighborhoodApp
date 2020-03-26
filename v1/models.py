@@ -2,7 +2,7 @@ import uuid
 
 from django.db import models
 
-from api_auth.models import User, Profile
+from api_auth.models import User
 
 
 class Hood(models.Model):
@@ -14,11 +14,32 @@ class Hood(models.Model):
     assignee = models.ForeignKey(
         User,
         related_name='assigned_user',
-        on_delete=models.DO_NOTHING
+        on_delete=models.DO_NOTHING,
+        default=None,
+        null=True
     )
 
     def save_hood(self):
         self.save()
+
+
+class Profile(models.Model):
+    gravatar = models.URLField(default='https://www.gravatar.com/avatar/')
+    bio = models.TextField(default="")
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    neighborhood = models.ForeignKey(Hood, on_delete=models.CASCADE, default=None, blank=True, null=True)
+
+    def save_profile(self):
+        self.save()
+
+    def update_profile(self, gravatar=None, bio=None):
+        if gravatar is not None:
+            self.gravatar = gravatar
+
+        if bio is not None:
+            self.bio = bio
+
+        self.save_profile()
 
 
 class Business(models.Model):
