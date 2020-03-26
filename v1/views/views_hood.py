@@ -5,7 +5,7 @@ from rest_framework.permissions import IsAuthenticated, IsAdminUser
 
 from ..models import Hood
 from..serializers import (
-    HoodListSerializer, HoodInfoSerializer, HoodJoinSerializer
+    HoodListSerializer, HoodInfoSerializer, HoodJoinSerializer, BusinessSerializer
 )
 
 
@@ -23,9 +23,16 @@ class HoodInfo(APIView):
     def get(self, request):
         if request.GET.get('public_id') is not None:
             hood = Hood.objects.filter(public_id=request.GET.get('public_id')).first()
+            hood_businesses = hood.business_set.all()
+
             serializer = HoodInfoSerializer(hood)
+            business_serializer = BusinessSerializer(hood_businesses, many=True)
+
             return Response(
-                serializer.data,
+                {
+                    "result": serializer.data,
+                    "businesses": business_serializer.data
+                },
                 status=status.HTTP_200_OK
                 )
              

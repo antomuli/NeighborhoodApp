@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Hood, Profile
+from .models import Hood, Profile, Business
 
 
 class UserProfileSerializer(serializers.ModelSerializer):
@@ -36,3 +36,9 @@ class HoodJoinSerializer(serializers.ModelSerializer):
     class Meta:
         model = Hood
         fields = ('public_id',)
+
+
+class BusinessSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Business
+        exclude = ['is_active', 'neighborhood', 'id']
