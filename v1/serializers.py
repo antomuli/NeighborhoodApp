@@ -28,3 +28,11 @@ class HoodInfoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Hood
         exclude = ['id']
+
+
+class HoodJoinSerializer(serializers.ModelSerializer):
+    public_id = serializers.UUIDField()
+    
+    class Meta:
+        model = Hood
+        fields = ('public_id',)
