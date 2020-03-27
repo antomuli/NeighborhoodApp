@@ -53,10 +53,15 @@ class DepartmentSerializer(serializers.ModelSerializer):
         model = Department
         exclude = ['neighborhood', 'id', 'is_active']
 
+
 class PostSerializer(serializers.ModelSerializer):
-    title = serializers.CharField()
-    content = serializers.CharField()
+    user_first_name = serializers.ReadOnlyField(source='user.first_name')
+    user_last_name = serializers.ReadOnlyField(source='user.last_name')
+    user_gravatar_url = serializers.ReadOnlyField(source='user.profile.gravatar')
+    title = serializers.CharField(min_length=1)
+    content = serializers.CharField(min_length=1)
 
     class Meta:
         model = Post
-        read_only_fields = ['created_at']
+        exclude = ['neighborhood', 'id', 'user']
+        read_only_fields = ['created_at', 'public_id']

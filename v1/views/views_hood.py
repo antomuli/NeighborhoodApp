@@ -1,12 +1,14 @@
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
-from rest_framework.permissions import IsAuthenticated, IsAdminUser
+from rest_framework.permissions import (
+    IsAuthenticated, IsAdminUser, IsAuthenticatedOrReadOnly
+)
 
-from ..models import Hood, Business
+from ..models import Hood, Business, Post
 from..serializers import (
     HoodListSerializer, HoodInfoSerializer, HoodJoinSerializer, 
-    BusinessSerializer, DepartmentSerializer
+    BusinessSerializer, DepartmentSerializer, PostSerializer
 )
 
 
@@ -77,10 +79,11 @@ class HoodCreateView(APIView):
                     status=status.HTTP_201_CREATED
                 )
             else:
-                return Response({
-                    'error': True,
-                    'message': 'Another hood with that location and name exists'
-                },
+                return Response(
+                    {
+                        "error": True,
+                        "message": "Another hood with that location and name exists"
+                    },
                 status=status.HTTP_409_CONFLICT
                 )
 
@@ -185,6 +188,41 @@ class BusinessView(APIView):
                 },
                 status=status.HTTP_409_CONFLICT
                 )
+        else:
+            return Response(
+                serializer.errors,
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+
+class PostView(APIView):
+    permission_classes = [IsAuthenticated, ]
+
+    def get(self, request):
+        all_posts = Post.objects.all()
+        serializer = PostSerializer(all_posts, many=True)
+
+        return Response(
+            {   
+                "neighboorhood_id": request.user.profile.neighborhood.public_id,
+                "count": len(serializer.data),
+                "results": serializer.data
+            }
+        )
+
+    def post(self, request):
+        serializer = PostSerializer(data=request.data)
+
+        if serializer.is_valid():
+            serializer.save(
+                user=request.user,
+                neighborhood=request.user.profile.neighborhood,
+            )
+            return Response(
+                serializer.data,
+                status=status.HTTP_201_CREATED
+            )
+
         else:
             return Response(
                 serializer.errors,
