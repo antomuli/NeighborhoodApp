@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Hood, Profile, Business, Department
+from .models import Hood, Profile, Business, Department, Post
 
 
 class UserProfileSerializer(serializers.ModelSerializer):
@@ -52,3 +52,11 @@ class DepartmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Department
         exclude = ['neighborhood', 'id', 'is_active']
+
+class PostSerializer(serializers.ModelSerializer):
+    title = serializers.CharField()
+    content = serializers.CharField()
+
+    class Meta:
+        model = Post
+        read_only_fields = ['created_at']
