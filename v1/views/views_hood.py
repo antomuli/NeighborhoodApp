@@ -3,9 +3,10 @@ from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 
-from ..models import Hood
+from ..models import Hood, Business
 from..serializers import (
-    HoodListSerializer, HoodInfoSerializer, HoodJoinSerializer, BusinessSerializer
+    HoodListSerializer, HoodInfoSerializer, HoodJoinSerializer, 
+    BusinessSerializer, DepartmentSerializer
 )
 
 
@@ -24,14 +25,15 @@ class HoodInfo(APIView):
         if request.GET.get('public_id') is not None:
             hood = Hood.objects.filter(public_id=request.GET.get('public_id')).first()
             hood_businesses = hood.business_set.all()
+            hood_depart = hood.department_set.all()
 
             serializer = HoodInfoSerializer(hood)
-            business_serializer = BusinessSerializer(hood_businesses, many=True)
 
             return Response(
                 {
                     "result": serializer.data,
-                    "businesses": business_serializer.data
+                    "businesses": len(hood_businesses),
+                    "departments": len(hood_depart)
                 },
                 status=status.HTTP_200_OK
                 )
@@ -134,6 +136,54 @@ class JoinHoodView(APIView):
                     "message": "Neighborhood does not exist"
                 },
                 status=status.HTTP_400_BAD_REQUEST
+                )
+        else:
+            return Response(
+                serializer.errors,
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+
+class BusinessView(APIView):
+    permission_classes = (IsAuthenticated,)
+
+    def get(self, request):
+        all_hood_businesses = Business.objects.filter(
+            neighborhood=request.user.profile.neighborhood,
+            is_active=True
+        ).all()
+        serializer = BusinessSerializer(all_hood_businesses, many=True)
+        return Response({
+            'total': len(all_hood_businesses),
+            'results': serializer.data
+        })
+
+    def post(self, request):
+        serializer = BusinessSerializer(data=request.data)
+
+        if serializer.is_valid():
+            user_business = Business.objects.filter(
+                owner=request.user,
+                neighborhood=request.user.profile.neighborhood,
+                business_name=serializer.validated_data['business_name'],
+                ).first()
+
+            if user_business is None:
+                serializer.save(
+                    owner=request.user,
+                    neighborhood=request.user.profile.neighborhood,
+                )
+
+                return Response(
+                    serializer.data,
+                    status=status.HTTP_201_CREATED
+                )
+            else:
+                return Response({
+                    'error': True,
+                    'message': 'You have already created that business'
+                },
+                status=status.HTTP_409_CONFLICT
                 )
         else:
             return Response(

@@ -10,4 +10,5 @@ urlpatterns = [
     path('view_hood', views.HoodInfo.as_view(), name="view_hood"),
     path('create_hood', views.HoodCreateView.as_view(), name="create_hood"),
     path('join', views.JoinHoodView.as_view(), name="join_hood"),
+    path('business', views.BusinessView.as_view(), name="business"),
 ]
