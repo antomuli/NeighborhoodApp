@@ -33,21 +33,3 @@ class User(AbstractUser):
 
     def save_user(self):
         self.save()
-
-
-class Profile(models.Model):
-    gravatar = models.URLField(default='https://www.gravatar.com/avatar/')
-    bio = models.TextField(default="")
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-
-    def save_profile(self):
-        self.save()
-
-    def update_profile(self, gravatar=None, bio=None):
-        if gravatar is not None:
-            self.gravatar = gravatar
-
-        if bio is not None:
-            self.bio = bio
-
-        self.save_profile()
