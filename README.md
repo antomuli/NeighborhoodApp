@@ -15,7 +15,7 @@ Neighboorhood API helps you keep up with events in your neighborhood. A user can
 To get started run this in a virtual environment:
 ```bash
 $ git clone https://github.com/HannesKimara/NeighborhoodApp.git
-$ cd awwwards
+$ cd NeighborhoodApp
 $ python -m pip install -r requirements.txt
 ```
 
