@@ -1,7 +1,7 @@
 # Neighbourhood App
 
-[![Build Status](https://travis-ci.com/HannesKimara/NeighborhoodApp.svg?branch=dev)](https://travis-ci.com/HannesKimara/NeighborhoodApp)
-[![codecov](https://codecov.io/gh/HannesKimara/NeighborhoodApp/branch/dev/graph/badge.svg)](https://codecov.io/gh/HannesKimara/NeighborhoodApp)
+[![Build Status](https://travis-ci.com/HannesKimara/NeighborhoodApp.svg?branch=master)](https://travis-ci.com/HannesKimara/NeighborhoodApp)
+[![codecov](https://codecov.io/gh/HannesKimara/NeighborhoodApp/branch/master/graph/badge.svg)](https://codecov.io/gh/HannesKimara/NeighborhoodApp)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ## Description
